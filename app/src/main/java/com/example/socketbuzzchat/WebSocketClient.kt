@@ -11,7 +11,7 @@ import org.json.JSONObject
 
 class WebSocketClient (private val mainActivity: MainActivity){
 
-    private val url: String = "wss://buzzmehi.com/socketChat/";
+    private val url: String = "wss://buzzmehi.com/socketChat/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFzaHdpbkBhZG1pbi5jb20iLCJpYXQiOjE3MDcyMDA2MzEsImV4cCI6MTcwNzIyOTQzMX0.843xcAMbZr0u_URly_zUlOKIDdX9zNdCQWA1pHLQwEY";
     private val authToken: String = "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im11ekBhZG1pbi5jb20iLCJpYXQiOjE3MDcxMTg1MzMsImV4cCI6MTcwNzE0NzMzM30.5C_rPRI8w_MVrzRRLvHLVaaae_84vCxXYl0fHp7OAnU";
 
     private val client = OkHttpClient()
@@ -20,7 +20,7 @@ class WebSocketClient (private val mainActivity: MainActivity){
     fun connect() {
         val request = Request.Builder()
             .url(url)
-            .addHeader("Authorization", "Bearer $authToken")
+            //.addHeader("Authorization", "Bearer $authToken")
             .build()
         webSocket = client.newWebSocket(request, MyWebSocketListener())
     }
@@ -49,15 +49,6 @@ class WebSocketClient (private val mainActivity: MainActivity){
         override fun onMessage(webSocket: WebSocket, text: String) {
             super.onMessage(webSocket, text)
             Log.d("WebSocket", "Received message: $text")
-
-            try {
-                val jsonObject = JSONObject(text)
-                val messageContent = jsonObject.getString("content")
-                Log.d("WebSocket", "onMessage: $messageContent")
-
-            } catch (e: JSONException) {
-                Log.e("WebSocket", "Error parsing JSON", e)
-            }
         }
 
         override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
